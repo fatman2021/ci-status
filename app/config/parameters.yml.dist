@@ -1,0 +1,10 @@
+parameters:
+    locale:            en
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    debug_toolbar:          true
+    debug_redirects:        false
+    use_assetic_controller: true
+
+    github.app.client_id:     abc
+    github.app.client_secret: abc

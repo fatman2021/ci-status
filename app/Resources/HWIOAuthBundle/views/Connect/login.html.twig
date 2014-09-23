@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <div class="jumbotron">
+        <h1>Build dashboard</h1>
+
+        <p>
+            The build overview of all your repositories.
+        </p>
+
+        <p>
+            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'github'}) }}" class="btn btn-primary btn-lg">
+                <i class="fa fa-github"></i>
+                Connect with GitHub
+            </a>
+        </p>
+    </div>
+
+    {% if error is defined and error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+{% endblock body %}

@@ -1,0 +1,12 @@
+/web/bundles/
+/app/bootstrap.php.cache
+/app/cache/*
+/app/config/parameters.yml
+/app/logs/*
+/app/data/*
+!/app/cache/.gitkeep
+!/app/logs/.gitkeep
+!/app/data/repositories/.gitkeep
+/vendor/
+/bin/
+/composer.phar

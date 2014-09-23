@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <h1>Dashboard</h1>
+
+    <ul>
+        {% for repository in repositories %}
+            <li>
+                <a href="https://github.com/{{ repository }}">{{ repository }}</a>:
+                <a href="https://travis-ci.org/{{ repository }}">
+                    {#<img src="https://travis-ci.org/{{ repository }}.svg?branch=master">#}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
