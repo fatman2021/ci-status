@@ -63,19 +63,19 @@ class RepositoryProvider
         return $github;
     }
 
-    private function getUserRepositories(Client $github, User $user)
+    private function getUserRepositories(Client $github)
     {
         $paginator = new ResultPager($github);
-        $repositories = $paginator->fetchAll($github->api('user'), 'repositories', [$user->getUsername()]);
+        $repositories = $paginator->fetchAll($github->api('current_user'), 'repositories', ['all']);
 
         return array_map(function ($array) {
             return $array['full_name'];
         }, $repositories);
     }
 
-    private function getUserOrganizationsRepositories(Client $github, User $user)
+    private function getUserOrganizationsRepositories(Client $github)
     {
-        $organizations = $github->api('user')->organizations($user->getUsername());
+        $organizations = $github->api('current_user')->organizations();
 
         $repositories = [];
         foreach ($organizations as $array) {
