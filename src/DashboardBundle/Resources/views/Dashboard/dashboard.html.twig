@@ -2,7 +2,26 @@
 
 {% block body %}
 
-    <h1>Dashboard</h1>
+    <div class="page-header">
+        <h1>Dashboard</h1>
+    </div>
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <p>
+        <button id="sync-repositories" type="button" class="btn btn-default btn-sm">
+            Sync repositories with GitHub
+        </button>
+    </p>
 
     <ul>
         {% for repository in repositories %}
@@ -15,4 +34,19 @@
         {% endfor %}
     </ul>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('#sync-repositories').click(function () {
+            var btn = $(this);
+            btn.button('loading');
+            $.post('{{ path('dashboard.sync_repositories') }}', function() {
+                btn.button('reset');
+                window.location.reload(false);
+            });
+        });
+    </script>
 {% endblock %}
