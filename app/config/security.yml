@@ -20,6 +20,10 @@ security:
                     github: "/login/check-github"
                 oauth_user_provider:
                     service: dashboard.user_provider
+            remember_me:
+                key:      "%secret%"
+                lifetime: 2678400 # 1 month
+                path:     /
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
