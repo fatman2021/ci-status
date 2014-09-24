@@ -2,10 +2,6 @@
 
 {% block body %}
 
-    <div class="page-header">
-        <h1>Dashboard</h1>
-    </div>
-
     {% for type, messages in app.session.flashbag.all() %}
         {% for message in messages %}
             <div class="alert alert-{{ type }} alert-dismissible">
@@ -17,26 +13,35 @@
         {% endfor %}
     {% endfor %}
 
+    <table class="dashboard table table-hover">
+        <tbody>
+        {% for repository in repositories %}
+            <tr data-repository="{{ repository.name }}"
+                data-pro="{{ repository.isPro() ? 1 : 0 }}"
+                data-token="{{ repository.travisToken }}">
+
+                <td class="vert-align">
+                    <a href="{{ githubUrl(repository) }}"><i class="fa fa-github fa-border"></i></a>
+                    {{ prettyRepositoryName(repository) }}
+                </td>
+
+                <td class="repository-status text-center">
+                    <a href="{{ travisUrl(repository) }}">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </a>
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
     <p>
-        <button id="sync-repositories" type="button" class="btn btn-default btn-sm">
+        <button id="sync-repositories" type="button" class="btn btn-primary">
+            <i class="fa fa-refresh"></i>
             Sync repositories
         </button>
     </p>
-
-    <ul>
-        {% for repository in repositories %}
-            <li data-repository="{{ repository.name }}" data-pro="{{ repository.isPro() ? 1 : 0 }}"
-                data-token="{{ repository.travisToken }}">
-
-                <a href="{{ githubUrl(repository) }}">{{ repository.name }}</a>:
-
-                <a class="repository-status label label-default" href="{{ travisUrl(repository) }}">
-                    <i class="fa fa-spinner fa-spin"></i>
-                </a>
-
-            </li>
-        {% endfor %}
-    </ul>
 
 {% endblock %}
 
@@ -82,7 +87,7 @@
                             break;
                         case 'errored':
                             text = 'Build error';
-                            labelClass = 'danger';
+                            labelClass = 'warning';
                             break;
                         case 'unknown':
                             default:
@@ -91,13 +96,12 @@
                             break;
                     }
                     $('[data-repository="' + repository + '"] .repository-status')
-                            .removeClass('label-default')
-                            .addClass('label-' + labelClass)
-                            .text(text);
+                            .addClass(labelClass)
+                            .find('a').text(text);
                 })
                 .fail(function () {
                     $('[data-repository="' + repository + '"] .repository-status')
-                            .text('error');
+                            .find('a').text(text);
                 });
             });
 

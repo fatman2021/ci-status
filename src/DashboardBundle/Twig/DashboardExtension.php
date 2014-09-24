@@ -9,8 +9,9 @@ class DashboardExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('githubUrl', [$this, 'githubUrl'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('travisUrl', [$this, 'travisUrl'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('githubUrl', [$this, 'githubUrl']),
+            new \Twig_SimpleFunction('travisUrl', [$this, 'travisUrl']),
+            new \Twig_SimpleFunction('prettyRepositoryName', [$this, 'prettyRepositoryName'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -26,6 +27,13 @@ class DashboardExtension extends \Twig_Extension
         }
 
         return 'https://travis-ci.org/' . $repository->getName();
+    }
+
+    public function prettyRepositoryName(Repository $repository)
+    {
+        list($account, $name) = explode('/', $repository->getName(), 2);
+
+        return sprintf('<span class="repo-account">%s</span><span class="repo-separator">/</span>%s', $account, $name);
     }
 
     public function getName()
