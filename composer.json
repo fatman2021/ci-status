@@ -18,7 +18,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "hwi/oauth-bundle": "0.4.*@dev",
         "knplabs/github-api": "~1.3",
-        "mnapoli/blackbox": "0.1.*"
+        "mnapoli/blackbox": "0.1.*",
+        "guzzlehttp/guzzle": "~4.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

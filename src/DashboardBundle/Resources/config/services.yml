@@ -1,5 +1,10 @@
 services:
 
+    dashboard.twig.dashboard_extension:
+        class: Piwik\DashboardBundle\Twig\DashboardExtension
+        tags:
+            - { name: twig.extension }
+
     dashboard.user_provider:
         class: Piwik\Dashboard\User\UserProvider
         arguments: ["@dashboard.storage.user"]
@@ -8,12 +13,15 @@ services:
         class: Piwik\Dashboard\User\UserStorage
 
     dashboard.repository_provider:
-        class: Piwik\Dashboard\Repository\RepositoryProvider
-        arguments: ["@dashboard.storage.repository"]
+        class: Piwik\Dashboard\RepositoryProvider
+        arguments: ["@dashboard.storage.repository", "@dashboard.storage.user", "@logger"]
 
     dashboard.storage.repository:
+        class: BlackBox\Transformer\PhpSerializeEncoder
+        arguments: ["@dashboard.storage.repository.file", "Piwik\Dashboard\Repository"]
+    dashboard.storage.repository.json:
         class: BlackBox\Transformer\JsonEncoder
-        arguments: ["@dashboard.storage.repository_wrapped", true]
-    dashboard.storage.repository_wrapped:
+        arguments: ["@dashboard.storage.repository.file", true]
+    dashboard.storage.repository.file:
         class: BlackBox\Adapter\MultipleFileStorage
-        arguments: ["%app.data_dir%/repositories", "json"]
+        arguments: ["%app.data_dir%/repositories"]

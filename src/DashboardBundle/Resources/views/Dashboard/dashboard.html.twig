@@ -19,15 +19,16 @@
 
     <p>
         <button id="sync-repositories" type="button" class="btn btn-default btn-sm">
-            Sync repositories with GitHub
+            Sync repositories
         </button>
     </p>
 
     <ul>
         {% for repository in repositories %}
             <li>
-                <a href="https://github.com/{{ repository }}">{{ repository }}</a>:
-                <a href="https://travis-ci.org/{{ repository }}">
+                <a href="{{ repository.githubUrl }}">{{ repository.name }}</a>:
+                <a href="{{ repository.travisUrl }}">
+                    {{ badge(repository.buildStatus) }}
                     {#<img src="https://travis-ci.org/{{ repository }}.svg?branch=master">#}
                 </a>
             </li>
