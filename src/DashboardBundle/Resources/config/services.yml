@@ -19,9 +19,6 @@ services:
     dashboard.storage.repository:
         class: BlackBox\Transformer\PhpSerializeEncoder
         arguments: ["@dashboard.storage.repository.file", "Piwik\Dashboard\Repository"]
-    dashboard.storage.repository.json:
-        class: BlackBox\Transformer\JsonEncoder
-        arguments: ["@dashboard.storage.repository.file", true]
     dashboard.storage.repository.file:
         class: BlackBox\Adapter\MultipleFileStorage
         arguments: ["%app.data_dir%/repositories"]

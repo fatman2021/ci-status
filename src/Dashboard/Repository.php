@@ -4,18 +4,15 @@ namespace Piwik\Dashboard;
 
 class Repository
 {
-    const BUILD_SUCCESS = 0;
-    const BUILD_FAILURE = 1;
-    const BUILD_ERROR   = 2;
-    const BUILD_UNKNOWN = 3;
-
     private $name;
-    private $buildStatus;
+    private $isPro;
+    private $travisToken;
 
-    public function __construct($name, $buildStatus)
+    public function __construct($name, $travisToken, $isPro = false)
     {
         $this->name = (string) $name;
-        $this->buildStatus = (string) $buildStatus;
+        $this->travisToken = (string) $travisToken;
+        $this->isPro = (bool) $isPro;
     }
 
     /**
@@ -29,24 +26,24 @@ class Repository
     /**
      * @return string
      */
-    public function getBuildStatus()
+    public function getTravisToken()
     {
-        return $this->buildStatus;
+        return $this->travisToken;
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getTravisUrl()
+    public function isPro()
     {
-        return 'https://travis-ci.org/' . $this->name;
+        return $this->isPro;
     }
 
     /**
-     * @return string
+     * @param bool $isPro
      */
-    public function getGithubUrl()
+    public function setPro($isPro)
     {
-        return 'https://github.com/' . $this->name;
+        $this->isPro = (bool) $isPro;
     }
 }

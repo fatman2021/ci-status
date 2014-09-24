@@ -9,33 +9,23 @@ class DashboardExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('badge', [$this, 'renderBadge'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('githubUrl', [$this, 'githubUrl'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('travisUrl', [$this, 'travisUrl'], ['is_safe' => ['html']]),
         ];
     }
 
-    public function renderBadge($status)
+    public function githubUrl(Repository $repository)
     {
-        switch ($status) {
-            case Repository::BUILD_SUCCESS:
-                $text = 'Build success';
-                $class = 'success';
-                break;
-            case Repository::BUILD_FAILURE:
-                $text = 'Build failure';
-                $class = 'danger';
-                break;
-            case Repository::BUILD_ERROR:
-                $text = 'Build error';
-                $class = 'danger';
-                break;
-            case Repository::BUILD_UNKNOWN:
-            default:
-                $text = 'Build unknown';
-                $class = 'warning';
-                break;
+        return 'https://github.com/' . $repository->getName();
+    }
+
+    public function travisUrl(Repository $repository)
+    {
+        if ($repository->isPro()) {
+            return 'https://magnum.travis-ci.com/' . $repository->getName();
         }
 
-        return sprintf('<span class="label label-%s">%s</span>', $class, $text);
+        return 'https://travis-ci.org/' . $repository->getName();
     }
 
     public function getName()

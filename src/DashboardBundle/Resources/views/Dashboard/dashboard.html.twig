@@ -25,12 +25,15 @@
 
     <ul>
         {% for repository in repositories %}
-            <li>
-                <a href="{{ repository.githubUrl }}">{{ repository.name }}</a>:
-                <a href="{{ repository.travisUrl }}">
-                    {{ badge(repository.buildStatus) }}
-                    {#<img src="https://travis-ci.org/{{ repository }}.svg?branch=master">#}
+            <li data-repository="{{ repository.name }}" data-pro="{{ repository.isPro() ? 1 : 0 }}"
+                data-token="{{ repository.travisToken }}">
+
+                <a href="{{ githubUrl(repository) }}">{{ repository.name }}</a>:
+
+                <a class="repository-status label label-default" href="{{ travisUrl(repository) }}">
+                    <i class="fa fa-spinner fa-spin"></i>
                 </a>
+
             </li>
         {% endfor %}
     </ul>
@@ -48,6 +51,56 @@
                 btn.button('reset');
                 window.location.reload(false);
             });
+        });
+
+        $(function () {
+
+            $('[data-repository]').each(function () {
+                var repository = $(this).data('repository');
+                var isPro = !! $(this).data('pro');
+                var token = $(this).data('token');
+
+                var endpoint = isPro ? 'https://api.travis-ci.com' : 'https://api.travis-ci.org';
+
+                $.ajax({
+                    url: endpoint + '/repos/' + repository + '/branches/master',
+                    headers: {
+                        Accept: 'application/vnd.travis-ci.2+json',
+                        Authorization: 'token ' + token
+                    }
+                })
+                .done(function(data) {
+                    var text, labelClass;
+                    switch (data.branch.state) {
+                        case 'passed':
+                            text = 'Build success';
+                            labelClass = 'success';
+                            break;
+                        case 'failed':
+                            text = 'Build failure';
+                            labelClass = 'danger';
+                            break;
+                        case 'errored':
+                            text = 'Build error';
+                            labelClass = 'danger';
+                            break;
+                        case 'unknown':
+                            default:
+                            text = 'Build unknown';
+                            labelClass = 'warning';
+                            break;
+                    }
+                    $('[data-repository="' + repository + '"] .repository-status')
+                            .removeClass('label-default')
+                            .addClass('label-' + labelClass)
+                            .text(text);
+                })
+                .fail(function () {
+                    $('[data-repository="' + repository + '"] .repository-status')
+                            .text('error');
+                });
+            });
+
         });
     </script>
 {% endblock %}

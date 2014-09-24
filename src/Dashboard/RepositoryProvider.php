@@ -3,14 +3,15 @@
 namespace Piwik\Dashboard;
 
 use BlackBox\StorageInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Message\ResponseInterface;
+use Piwik\Dashboard\Travis\TravisClient;
 use Piwik\Dashboard\User\User;
 use Piwik\Dashboard\User\UserStorage;
-use Psr\Log\LoggerInterface;
 
 class RepositoryProvider
 {
+    const TRAVIS_ENDPOINT = 'https://api.travis-ci.org/';
+    const TRAVIS_PRO_ENDPOINT = 'https://api.travis-ci.com/';
+
     /**
      * @var StorageInterface
      */
@@ -21,16 +22,10 @@ class RepositoryProvider
      */
     private $userStorage;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(StorageInterface $repositoryStorage, UserStorage $userStorage, LoggerInterface $logger)
+    public function __construct(StorageInterface $repositoryStorage, UserStorage $userStorage)
     {
         $this->repositoryStorage = $repositoryStorage;
         $this->userStorage = $userStorage;
-        $this->logger = $logger;
     }
 
     /**
@@ -60,45 +55,21 @@ class RepositoryProvider
      */
     public function syncRepositories(User $user)
     {
-        $client = $this->createApiClient($user);
+        // Fetch from Travis.org and Travis.com
+        $travis = new TravisClient(self::TRAVIS_ENDPOINT, $user);
+        $repositories = $travis->getUserRepositories($user);
 
-        /** @var ResponseInterface $response */
-        $response = $client->get('repos/?member=' . $user->getUsername());
+        // Fetch from Travis.com
+        $travisPro = new TravisClient(self::TRAVIS_PRO_ENDPOINT, $user);
+        $proRepositories = $travisPro->getUserRepositories($user);
+        array_walk($proRepositories, function (Repository $repository) {
+            $repository->setPro(true);
+        });
 
-        $repositories = array_map(function (array $repo) {
-            return new Repository($repo['slug'], $repo['last_build_status']);
-        }, $response->json());
+        $repositories = array_merge($repositories, $proRepositories);
 
         $this->repositoryStorage->set($user->getUsername(), $repositories);
 
         return $repositories;
-    }
-
-    private function createApiClient(User $user)
-    {
-        $client = new Client([
-            'base_url' => 'https://api.travis-ci.org/',
-        ]);
-
-        if ($user->getTravisToken() === null) {
-            $this->authenticate($client, $user);
-        }
-        $client->setDefaultOption('headers/Authorization', sprintf('token "%s"', $user->getTravisToken()));
-
-        return $client;
-    }
-
-    private function authenticate(Client $client, User $user)
-    {
-        $this->logger->info('Getting Travis token for user {user}', ['user' => $user->getUsername()]);
-
-        /** @var ResponseInterface $response */
-        $response = $client->post('auth/github', [
-            'json' => ['github_token' => $user->getGithubToken()]
-        ]);
-        $travisToken = $response->json()['access_token'];
-
-        $user->setTravisToken($travisToken);
-        $this->userStorage->store($user);
     }
 }
