@@ -21,14 +21,15 @@
                 data-token="{{ repository.travisToken }}">
 
                 <td>
-                    <a href="{{ githubUrl(repository) }}"><i class="fa fa-github fa-border"></i></a>
+                    <a href="{{ githubUrl(repository) }}" target="_blank">
+                        <i class="fa fa-github fa-border"></i></a>
                     {{ prettyRepositoryName(repository) }}
                 </td>
 
                 <td class="author hidden-xs"></td>
 
                 <td class="repository-status text-center">
-                    <a href="{{ travisUrl(repository) }}">
+                    <a href="{{ travisUrl(repository) }}" target="_blank">
                         <i class="fa fa-spinner fa-spin"></i>
                     </a>
                 </td>
