@@ -5,7 +5,6 @@ namespace Piwik\Dashboard;
 use BlackBox\StorageInterface;
 use Piwik\Dashboard\Travis\TravisClient;
 use Piwik\Dashboard\User\User;
-use Piwik\Dashboard\User\UserStorage;
 
 class RepositoryProvider
 {
@@ -17,15 +16,9 @@ class RepositoryProvider
      */
     private $repositoryStorage;
 
-    /**
-     * @var UserStorage
-     */
-    private $userStorage;
-
-    public function __construct(StorageInterface $repositoryStorage, UserStorage $userStorage)
+    public function __construct(StorageInterface $repositoryStorage)
     {
         $this->repositoryStorage = $repositoryStorage;
-        $this->userStorage = $userStorage;
     }
 
     /**

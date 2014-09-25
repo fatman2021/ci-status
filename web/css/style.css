@@ -30,3 +30,8 @@ table.dashboard td.warning a {
     margin: 0 3px;
     color: #d4d3c2;
 }
+
+/* Theme bugfix -_- */
+.btn-lg, .btn-group-lg>.btn {
+    font-size: 18px !important;
+}
