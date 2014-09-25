@@ -8,8 +8,8 @@
         <title>{% block title %}CI status dashboard{% endblock %}</title>
 
         {% block stylesheets %}
-            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/bootstrap.theme.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         {% endblock %}
@@ -41,8 +41,8 @@
         </div>
 
         {% block javascripts %}
-            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-            <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+            <script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
         {% endblock %}
     </body>
 </html>
