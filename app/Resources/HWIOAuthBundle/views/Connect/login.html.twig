@@ -6,7 +6,7 @@
         <h1>Build dashboard</h1>
 
         <p>
-            The build overview of all your repositories.
+            The build overview of all your repositories for Travis CI.
         </p>
 
         <p>
@@ -20,5 +20,19 @@
     {% if error is defined and error %}
         <div class="alert alert-danger">{{ error }}</div>
     {% endif %}
+
+    <h4 class="text-warning">
+        A bit of a warning
+    </h4>
+
+    <p>
+        In order to show your private repositories, we need to get the appropriate authorization from GitHub.
+    </p>
+
+    <p>
+        Unfortunately, GitHub's API does not provide a <strong>read-only</strong> access, so we ask for
+        write permission when you "Connect with GitHub".
+        Rest assured that we will never write to those repositories.
+    </p>
 
 {% endblock body %}
