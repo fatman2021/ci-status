@@ -1,5 +1,5 @@
 {
-    "name": "piwik/build-status",
+    "name": "piwik/ci-status",
     "license": "MIT",
     "type": "project",
     "autoload": {

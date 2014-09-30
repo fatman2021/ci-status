@@ -10,7 +10,8 @@
         </p>
 
         <p>
-            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'github'}) }}" class="btn btn-primary btn-lg">
+            <a id="login" href="{{ path('hwi_oauth_service_redirect', {'service': 'github'}) }}" class="btn btn-primary btn-lg"
+               data-loading-text="Connecting to GitHub through the Internet tubes…">
                 <i class="fa fa-github"></i>
                 Connect with GitHub
             </a>
@@ -27,12 +28,24 @@
 
     <p>
         In order to show your private repositories, we need to get the appropriate authorization from GitHub.
+        Unfortunately, GitHub's API does not provide a <strong>read-only</strong> access, so we ask for
+        write permission when you "Connect with GitHub".
     </p>
 
     <p>
-        Unfortunately, GitHub's API does not provide a <strong>read-only</strong> access, so we ask for
-        write permission when you "Connect with GitHub".
-        Rest assured that we will never write to those repositories.
+        This application will never write anything to your repositories. Furthermore, it doesn't
+        store you GitHub token anywhere except in your current session for security reasons.
+        The only downside is that you have to click "Connect with GitHub" every time.
     </p>
 
 {% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('#login').click(function () {
+            $(this).button('loading');
+        });
+    </script>
+{% endblock %}
