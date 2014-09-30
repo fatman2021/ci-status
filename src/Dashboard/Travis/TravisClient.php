@@ -28,6 +28,10 @@ class TravisClient
      * @var string
      */
     private $travisToken;
+
+    /**
+     * @var string
+     */
     private $githubToken;
 
     public function __construct($apiEndpoint, User $user, $githubToken)

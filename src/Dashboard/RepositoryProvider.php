@@ -2,7 +2,6 @@
 
 namespace Piwik\Dashboard;
 
-use BlackBox\StorageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Piwik\Dashboard\Travis\TravisClient;
 use Piwik\Dashboard\User\User;
@@ -14,18 +13,12 @@ class RepositoryProvider
     const TRAVIS_PRO_ENDPOINT = 'https://api.travis-ci.com/';
 
     /**
-     * @var StorageInterface
-     */
-    private $repositoryStorage;
-
-    /**
      * @var SecurityContextInterface
      */
     private $securityContext;
 
-    public function __construct(StorageInterface $repositoryStorage, SecurityContextInterface $securityContext)
+    public function __construct(SecurityContextInterface $securityContext)
     {
-        $this->repositoryStorage = $repositoryStorage;
         $this->securityContext = $securityContext;
     }
 
@@ -38,31 +31,13 @@ class RepositoryProvider
      */
     public function getRepositories(User $user)
     {
-        $repositories = $this->repositoryStorage->get($user->getUsername());
-
-        if ($repositories === null) {
-            $repositories = $this->syncRepositories($user);
-        }
-
-        return $repositories;
-    }
-
-    /**
-     * Synchronize repositories with Travis and stores the result.
-     *
-     * @param User $user
-     *
-     * @return string[] Synchronized repositories
-     */
-    public function syncRepositories(User $user)
-    {
         $securityToken = $this->securityContext->getToken();
         if (! $securityToken instanceof OAuthToken) {
-            throw new \RuntimeException('This should not happen...');
+            throw new \RuntimeException('This should not happen... But just to be sure there\'s an exception');
         }
         $githubToken = $securityToken->getAccessToken();
 
-        // Fetch from Travis.org and Travis.com
+        // Fetch from Travis.org
         $travis = new TravisClient(self::TRAVIS_ENDPOINT, $user, $githubToken);
         $repositories = $travis->getUserRepositories($user);
 
@@ -74,8 +49,6 @@ class RepositoryProvider
         });
 
         $repositories = array_merge($repositories, $proRepositories);
-
-        $this->repositoryStorage->set($user->getUsername(), $repositories);
 
         return $repositories;
     }

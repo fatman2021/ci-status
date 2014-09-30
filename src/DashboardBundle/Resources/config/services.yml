@@ -10,18 +10,4 @@ services:
 
     dashboard.repository_provider:
         class: Piwik\Dashboard\RepositoryProvider
-        arguments: ["@dashboard.storage.repository", "@security.context"]
-
-    dashboard.storage.user:
-        class: BlackBox\Transformer\PhpSerializeEncoder
-        arguments: ["@dashboard.storage.user.file"]
-    dashboard.storage.user.file:
-        class: BlackBox\Adapter\MultipleFileStorage
-        arguments: ["%app.data_dir%/users"]
-
-    dashboard.storage.repository:
-        class: BlackBox\Transformer\PhpSerializeEncoder
-        arguments: ["@dashboard.storage.repository.file"]
-    dashboard.storage.repository.file:
-        class: BlackBox\Adapter\MultipleFileStorage
-        arguments: ["%app.data_dir%/repositories"]
+        arguments: ["@security.context"]
