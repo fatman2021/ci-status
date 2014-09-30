@@ -7,11 +7,10 @@ services:
 
     dashboard.user_provider:
         class: Piwik\Dashboard\User\UserProvider
-        arguments: ["@dashboard.storage.user"]
 
     dashboard.repository_provider:
         class: Piwik\Dashboard\RepositoryProvider
-        arguments: ["@dashboard.storage.repository"]
+        arguments: ["@dashboard.storage.repository", "@security.context"]
 
     dashboard.storage.user:
         class: BlackBox\Transformer\PhpSerializeEncoder

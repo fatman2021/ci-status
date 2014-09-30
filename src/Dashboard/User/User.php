@@ -14,11 +14,6 @@ class User implements UserInterface
     /**
      * @var string
      */
-    private $githubToken;
-
-    /**
-     * @var string
-     */
     private $travisToken;
 
     /**
@@ -26,10 +21,9 @@ class User implements UserInterface
      */
     private $travisProToken;
 
-    public function __construct($username, $githubToken)
+    public function __construct($username)
     {
         $this->username = (string) $username;
-        $this->githubToken = $githubToken;
     }
 
     /**
@@ -38,14 +32,6 @@ class User implements UserInterface
     public function getUsername()
     {
         return $this->username;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGithubToken()
-    {
-        return $this->githubToken;
     }
 
     /**
@@ -77,6 +63,8 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+        unset($this->travisToken);
+        unset($this->travisProToken);
     }
 
     /**

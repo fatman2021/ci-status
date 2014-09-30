@@ -28,11 +28,16 @@ class TravisClient
      * @var string
      */
     private $travisToken;
+    private $githubToken;
 
-    public function __construct($apiEndpoint, User $user)
+    public function __construct($apiEndpoint, User $user, $githubToken)
     {
         $this->apiEndpoint = (string) $apiEndpoint;
         $this->user = $user;
+        if (! $githubToken) {
+            throw new \InvalidArgumentException('The GitHub token provided is empty');
+        }
+        $this->githubToken = (string) $githubToken;
 
         $this->createApiClient();
     }
@@ -76,7 +81,7 @@ class TravisClient
     {
         /** @var ResponseInterface $response */
         $response = $this->client->post('auth/github', [
-            'json' => ['github_token' => $this->user->getGithubToken()]
+            'json' => ['github_token' => $this->githubToken]
         ]);
 
         $this->travisToken = $response->json()['access_token'];
