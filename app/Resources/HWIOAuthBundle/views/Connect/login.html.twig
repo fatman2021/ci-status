@@ -3,15 +3,15 @@
 {% block body %}
 
     <div class="jumbotron">
-        <h1>Build dashboard</h1>
+        <h1>CI Status</h1>
 
         <p>
-            The build overview of all your repositories for Travis CI.
+            The build dashboard of all your repositories on Travis CI.
         </p>
 
         <p>
             <a id="login" href="{{ path('hwi_oauth_service_redirect', {'service': 'github'}) }}" class="btn btn-primary btn-lg"
-               data-loading-text="Connecting to GitHub through the Internet tubes…">
+               data-loading-text="<i class='fa fa-spinner fa-spin'></i> Connecting to GitHub through the Internet tubes…">
                 <i class="fa fa-github"></i>
                 Connect with GitHub
             </a>
@@ -35,7 +35,7 @@
     <p>
         This application will never write anything to your repositories. Furthermore, it doesn't
         store you GitHub token anywhere except in your current session for security reasons.
-        The only downside is that you have to click "Connect with GitHub" every time.
+        The only downside is that you have to click "Connect with GitHub" on each of your visit.
     </p>
 
 {% endblock body %}
