@@ -11,16 +11,6 @@ class User implements UserInterface
      */
     private $username;
 
-    /**
-     * @var string
-     */
-    private $travisToken;
-
-    /**
-     * @var string
-     */
-    private $travisProToken;
-
     public function __construct($username)
     {
         $this->username = (string) $username;
@@ -63,39 +53,5 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        unset($this->travisToken);
-        unset($this->travisProToken);
-    }
-
-    /**
-     * @return string
-     */
-    public function getTravisToken()
-    {
-        return $this->travisToken;
-    }
-
-    /**
-     * @param string $travisToken
-     */
-    public function setTravisToken($travisToken)
-    {
-        $this->travisToken = $travisToken;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTravisProToken()
-    {
-        return $this->travisProToken;
-    }
-
-    /**
-     * @param string $travisProToken
-     */
-    public function setTravisProToken($travisProToken)
-    {
-        $this->travisProToken = $travisProToken;
     }
 }
