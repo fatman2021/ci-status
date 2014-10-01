@@ -22,6 +22,7 @@ function refreshRepository() {
 
     request.done(function(data) {
         var text, labelClass;
+        console.log(data);
         switch (data.branch.state) {
             case 'passed':
                 text = 'Build success';
@@ -52,14 +53,16 @@ function refreshRepository() {
             .find('a').text(text);
 
         // Author
-        var author = data.commit.author_name;
         domNode.find('.author')
-            .html('<i class="fa fa-user"></i> ' + author);
+            .tooltip({ title: data.commit.message, placement: 'bottom' })
+            .html('<i class="fa fa-user"></i> ' + data.commit.author_name);
 
-        // Time taken to build
         if (data.branch.duration != null) {
+            // Time taken to build
+            var duration = Math.round(data.branch.duration / 60);
             domNode.find('.build-duration')
-                .html('<i class="fa fa-clock-o"></i> ' + Math.round(data.branch.duration / 60) + 'min');
+                .tooltip({ title: 'Build duration: ' + duration + ' minute(s)', placement: 'bottom' })
+                .html('<i class="fa fa-clock-o"></i> ' + duration + 'min');
         }
     });
 

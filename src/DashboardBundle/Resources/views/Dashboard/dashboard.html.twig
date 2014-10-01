@@ -13,7 +13,7 @@
         {% endfor %}
     {% endfor %}
 
-    <table class="dashboard table table-hover">
+    <table id="dashboard" class="table table-hover">
         <tbody>
         {% for repository in repositories %}
             <tr data-repository="{{ repository.name }}"
