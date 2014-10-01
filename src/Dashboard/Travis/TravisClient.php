@@ -3,10 +3,14 @@
 namespace Piwik\Dashboard\Travis;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Message\ResponseInterface;
 use Piwik\Dashboard\Repository;
 use Piwik\Dashboard\User\User;
 
+/**
+ * Client for the Travis CI API.
+ */
 class TravisClient
 {
     /**
@@ -34,6 +38,11 @@ class TravisClient
      */
     private $githubToken;
 
+    /**
+     * @param string $apiEndpoint You need to provide the API endpoint because it can be Travis.org or Travis.com
+     * @param User   $user
+     * @param string $githubToken
+     */
     public function __construct($apiEndpoint, User $user, $githubToken)
     {
         $this->apiEndpoint = (string) $apiEndpoint;
@@ -83,10 +92,21 @@ class TravisClient
      */
     private function authenticate()
     {
-        /** @var ResponseInterface $response */
-        $response = $this->client->post('auth/github', [
-            'json' => ['github_token' => $this->githubToken]
-        ]);
+        try {
+            /** @var ResponseInterface $response */
+            $response = $this->client->post('auth/github', [
+                'json' => ['github_token' => $this->githubToken]
+            ]);
+        } catch (RequestException $e) {
+            $status = $e->hasResponse() ? $e->getResponse()->getStatusCode() : null;
+
+            // Right now Travis returns a 500 error if the token is invalid so it's impossible to test (sigh...)
+            if ($status === 401 || $status === 403 || $status === 500) {
+                throw new NoTravisAccountException;
+            }
+
+            throw $e;
+        }
 
         $this->travisToken = $response->json()['access_token'];
     }

@@ -3,6 +3,7 @@
 namespace Piwik\Dashboard;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Piwik\Dashboard\Travis\NoTravisAccountException;
 use Piwik\Dashboard\Travis\TravisClient;
 use Piwik\Dashboard\User\User;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -38,15 +39,23 @@ class RepositoryProvider
         $githubToken = $securityToken->getAccessToken();
 
         // Fetch from Travis.org
-        $travis = new TravisClient(self::TRAVIS_ENDPOINT, $user, $githubToken);
-        $repositories = $travis->getUserRepositories($user);
+        try {
+            $travis = new TravisClient(self::TRAVIS_ENDPOINT, $user, $githubToken);
+            $repositories = $travis->getUserRepositories($user);
+        } catch (NoTravisAccountException $e) {
+            $repositories = [];
+        }
 
         // Fetch from Travis.com
-        $travisPro = new TravisClient(self::TRAVIS_PRO_ENDPOINT, $user, $githubToken);
-        $proRepositories = $travisPro->getUserRepositories($user);
-        array_walk($proRepositories, function (Repository $repository) {
-            $repository->setPro(true);
-        });
+        try {
+            $travisPro = new TravisClient(self::TRAVIS_PRO_ENDPOINT, $user, $githubToken);
+            $proRepositories = $travisPro->getUserRepositories($user);
+            array_walk($proRepositories, function (Repository $repository) {
+                $repository->setPro(true);
+            });
+        } catch (NoTravisAccountException $e) {
+            $proRepositories = [];
+        }
 
         $repositories = array_merge($repositories, $proRepositories);
 
