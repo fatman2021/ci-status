@@ -1,21 +1,48 @@
 $(function() {
-
-    jQuery("abbr.timeago").timeago();
-
-    $('[data-repository]').each(refreshRepository);
-
-    sortTable();
-
+    refreshRepositories();
 });
 
-function sortTable()
+function sortTable(sort)
 {
-    $('#dashboard tr').tsort('', {
-        data: 'status'
-    }, '', {
-        data: 'date',
-        order: 'desc'
-    });
+    switch (sort) {
+        case 'recent':
+            $('#dashboard tr').tsort('', {
+                data: 'date',
+                order: 'desc'
+            });
+            break;
+        case 'name':
+            $('#dashboard tr').tsort('', {
+                data: 'repository'
+            });
+            break;
+        default:
+            $('#dashboard tr').tsort('', {
+                data: 'status'
+            }, '', {
+                data: 'date',
+                order: 'desc'
+            });
+            break;
+    }
+}
+
+function refreshRepositories()
+{
+    // Clear
+    var dashboard = $('#dashboard');
+    dashboard.find('.repository-status')
+        .removeClass('danger warning success info')
+        .find('a')
+        .html('<i class="fa fa-spinner fa-spin"></i>');
+    dashboard.find('.author')
+        .tooltip('destroy')
+        .empty();
+    dashboard.find('.build-duration')
+        .tooltip('destroy')
+        .empty();
+
+    $('[data-repository]').each(refreshRepository);
 }
 
 function refreshRepository()

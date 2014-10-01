@@ -18,6 +18,10 @@ footer {
     background-color: #f5f5f5;
 }
 
+#button-bar {
+    margin-bottom: 20px;
+}
+
 #dashboard {
     font-size: 1.2em;
 }
