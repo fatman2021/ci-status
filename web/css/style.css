@@ -42,6 +42,9 @@ table#dashboard td.info a {
     color: #d4d3c2;
     text-align: right;
 }
+#dashboard td.build-metadata a {
+    color: #d4d3c2;
+}
 
 .repo-account {
     margin-left: 10px;

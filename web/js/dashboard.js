@@ -1,5 +1,7 @@
 $(function() {
 
+    jQuery("abbr.timeago").timeago();
+
     $('[data-repository]').each(refreshRepository);
 
 });
@@ -22,7 +24,6 @@ function refreshRepository() {
 
     request.done(function(data) {
         var text, labelClass;
-        console.log(data);
         switch (data.branch.state) {
             case 'passed':
                 text = 'Build success';
@@ -50,12 +51,15 @@ function refreshRepository() {
         // Status
         domNode.find('.repository-status')
             .addClass(labelClass)
-            .find('a').text(text);
+            .find('a')
+                .text(text);
 
         // Author
+        var commitUrl = data.commit.compare_url;
+        var commitTime = $.timeago(data.commit.committed_at);
         domNode.find('.author')
-            .tooltip({ title: data.commit.message, placement: 'bottom' })
-            .html('<i class="fa fa-user"></i> ' + data.commit.author_name);
+            .tooltip({ title: commitTime + ': ' + data.commit.message, placement: 'bottom' })
+            .html('<a href="' + commitUrl + '"><i class="fa fa-user"></i> ' + data.commit.author_name + '</a>');
 
         if (data.branch.duration != null) {
             // Time taken to build
