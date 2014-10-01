@@ -37,6 +37,10 @@ function refreshRepository() {
                 text = 'Build error';
                 labelClass = 'danger';
                 break;
+            case 'created':
+                text = 'Waiting';
+                labelClass = 'info';
+                break;
             case 'started':
                 text = 'Running';
                 labelClass = 'info';
