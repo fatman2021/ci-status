@@ -128,9 +128,11 @@ function refreshRepository()
         domNode.find('.build-time')
             .html('<i class="fa fa-clock-o"></i> ' + $.timeago(startedAt));
 
-        if (!! data.branch.duration) {
+        if (!! data.branch.finished_at) {
             // Build duration
-            var duration = Math.round(data.branch.duration / 60);
+            var started = new Date(data.branch.started_at);
+            var finished = new Date(data.branch.finished_at);
+            var duration = Math.round((finished.getTime() - started.getTime()) / 60000);
             domNode.find('.build-time')
                 .tooltip({title: 'Build duration: ' + duration + ' minute(s)', placement: 'bottom'});
         }
