@@ -25,13 +25,19 @@ table.dashboard>tbody>tr>td {
     padding: 12px;
     vertical-align: middle;
 }
+table.dashboard td.default a {
+    color: #959488;
+}
 table.dashboard td.danger a {
     color: #e37272;
 }
 table.dashboard td.warning a {
     color: #f4a167;
 }
-.dashboard td.author {
+table.dashboard td.info a {
+    color: #5bc0de;
+}
+.dashboard td.build-metadata {
     font-size: 0.7em;
     color: #d4d3c2;
     text-align: right;

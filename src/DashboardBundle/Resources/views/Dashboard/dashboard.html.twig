@@ -26,7 +26,10 @@
                     {{ prettyRepositoryName(repository) }}
                 </td>
 
-                <td class="author hidden-xs"></td>
+                <td class="hidden-xs build-metadata">
+                    <span class="author"></span>
+                    <span class="build-duration"></span>
+                </td>
 
                 <td class="repository-status text-center">
                     <a href="{{ travisUrl(repository) }}" target="_blank">
@@ -43,61 +46,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-
-    <script>
-        $(function () {
-
-            $('[data-repository]').each(function () {
-                var repository = $(this).data('repository');
-                var isPro = !! $(this).data('pro');
-                var token = $(this).data('token');
-
-                var endpoint = isPro ? 'https://api.travis-ci.com' : 'https://api.travis-ci.org';
-
-                $.ajax({
-                    url: endpoint + '/repos/' + repository + '/branches/master',
-                    headers: {
-                        Accept: 'application/vnd.travis-ci.2+json',
-                        Authorization: 'token ' + token
-                    }
-                })
-                .done(function(data) {
-                    var text, labelClass;
-                    switch (data.branch.state) {
-                        case 'passed':
-                            text = 'Build success';
-                            labelClass = 'success';
-                            break;
-                        case 'failed':
-                            text = 'Build failure';
-                            labelClass = 'danger';
-                            break;
-                        case 'errored':
-                            text = 'Build error';
-                            labelClass = 'danger';
-                            break;
-                        case 'unknown':
-                            default:
-                            text = 'Build unknown';
-                            labelClass = 'warning';
-                            break;
-                    }
-
-                    $('[data-repository="' + repository + '"] .repository-status')
-                            .addClass(labelClass)
-                            .find('a').text(text);
-
-                    var author = data.commit.author_name;
-
-                    $('[data-repository="' + repository + '"] .author')
-                            .html('<i class="fa fa-user"></i> ' + author);
-                })
-                .fail(function () {
-                    $('[data-repository="' + repository + '"] .repository-status')
-                            .find('a').text('error');
-                });
-            });
-
-        });
-    </script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 {% endblock %}
