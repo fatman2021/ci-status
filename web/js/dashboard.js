@@ -2,9 +2,11 @@ $(function() {
     refreshRepositories();
 });
 
-function sortTable(sort)
+var currentSort = 'status';
+
+function sortTable()
 {
-    switch (sort) {
+    switch (currentSort) {
         case 'recent':
             $('#dashboard tr').tsort('', {
                 data: 'date',
@@ -16,6 +18,7 @@ function sortTable(sort)
                 data: 'repository'
             });
             break;
+        case 'status':
         default:
             $('#dashboard tr').tsort('', {
                 data: 'status'
@@ -38,7 +41,7 @@ function refreshRepositories()
     dashboard.find('.author')
         .tooltip('destroy')
         .empty();
-    dashboard.find('.build-duration')
+    dashboard.find('.build-time')
         .tooltip('destroy')
         .empty();
 
@@ -55,6 +58,7 @@ function refreshRepository()
     var endpoint = isPro ? 'https://api.travis-ci.com' : 'https://api.travis-ci.org';
 
     domNode.data('status', 999);
+    domNode.data('date', '1970-01-01T00:00:00');
 
     var request = $.ajax({
         url: endpoint + '/repos/' + repository + '/branches/master',
@@ -78,11 +82,13 @@ function refreshRepository()
                 order = 2;
                 break;
             case 'started':
+                console.log(data);
                 text = 'Running';
                 labelClass = 'info';
                 order = 3;
                 break;
             case 'created':
+                console.log(data);
                 text = 'Waiting';
                 labelClass = 'info';
                 order = 4;
@@ -101,8 +107,9 @@ function refreshRepository()
         }
 
         // Sort data
+        var startedAt = (!!data.branch.started_at) ? data.branch.started_at : data.commit.committed_at;
         domNode.data('status', order);
-        domNode.data('date', data.branch.finished_at);
+        domNode.data('date', startedAt);
 
         // Status
         domNode.find('.repository-status')
@@ -117,12 +124,15 @@ function refreshRepository()
             .tooltip({ title: commitTime + ': ' + data.commit.message, placement: 'bottom' })
             .html('<a href="' + commitUrl + '"><i class="fa fa-user"></i> ' + data.commit.author_name + '</a>');
 
-        if (data.branch.duration != null) {
-            // Time taken to build
+        // Build date
+        domNode.find('.build-time')
+            .html('<i class="fa fa-clock-o"></i> ' + $.timeago(startedAt));
+
+        if (!! data.branch.duration) {
+            // Build duration
             var duration = Math.round(data.branch.duration / 60);
-            domNode.find('.build-duration')
-                .tooltip({ title: 'Build duration: ' + duration + ' minute(s)', placement: 'bottom' })
-                .html('<i class="fa fa-clock-o"></i> ' + duration + 'min');
+            domNode.find('.build-time')
+                .tooltip({title: 'Build duration: ' + duration + ' minute(s)', placement: 'bottom'});
         }
 
         sortTable();
