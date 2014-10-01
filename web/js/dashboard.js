@@ -4,15 +4,30 @@ $(function() {
 
     $('[data-repository]').each(refreshRepository);
 
+    sortTable();
+
 });
 
-function refreshRepository() {
+function sortTable()
+{
+    $('#dashboard tr').tsort('', {
+        data: 'status'
+    }, '', {
+        data: 'date',
+        order: 'desc'
+    });
+}
+
+function refreshRepository()
+{
     var domNode = $(this);
     var repository = domNode.data('repository');
     var isPro = !!domNode.data('pro');
     var token = domNode.data('token');
 
     var endpoint = isPro ? 'https://api.travis-ci.com' : 'https://api.travis-ci.org';
+
+    domNode.data('status', 999);
 
     var request = $.ajax({
         url: endpoint + '/repos/' + repository + '/branches/master',
@@ -23,34 +38,44 @@ function refreshRepository() {
     });
 
     request.done(function(data) {
-        var text, labelClass;
+        var text, labelClass, order;
         switch (data.branch.state) {
-            case 'passed':
-                text = 'Build success';
-                labelClass = 'success';
+            case 'errored':
+                text = 'Build error';
+                labelClass = 'danger';
+                order = 1;
                 break;
             case 'failed':
                 text = 'Build failure';
                 labelClass = 'danger';
-                break;
-            case 'errored':
-                text = 'Build error';
-                labelClass = 'danger';
-                break;
-            case 'created':
-                text = 'Waiting';
-                labelClass = 'info';
+                order = 2;
                 break;
             case 'started':
                 text = 'Running';
                 labelClass = 'info';
+                order = 3;
+                break;
+            case 'created':
+                text = 'Waiting';
+                labelClass = 'info';
+                order = 4;
+                break;
+            case 'passed':
+                text = 'Build success';
+                labelClass = 'success';
+                order = 5;
                 break;
             default:
                 console.log('Unknown build status: ' + data.branch.state);
                 text = 'Status unknown';
                 labelClass = 'warning';
+                order = 6;
                 break;
         }
+
+        // Sort data
+        domNode.data('status', order);
+        domNode.data('date', data.branch.finished_at);
 
         // Status
         domNode.find('.repository-status')
@@ -72,11 +97,15 @@ function refreshRepository() {
                 .tooltip({ title: 'Build duration: ' + duration + ' minute(s)', placement: 'bottom' })
                 .html('<i class="fa fa-clock-o"></i> ' + duration + 'min');
         }
+
+        sortTable();
     });
 
     request.fail(function() {
         domNode.find('.repository-status')
             .addClass('default')
             .find('a').text('No builds on master');
+
+        sortTable();
     });
 }
