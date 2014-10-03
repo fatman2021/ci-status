@@ -1,30 +1,35 @@
-# CI build status dashboard
+# CI Status dashboard
 
-The CI dashboard is a web application that shows a CI status summary for all your repositories.
+The CI Status dashboard is a web application that shows a build status summary for all your repositories.
+
+It will fetch the continuous integration status for repositories on [Travis-CI.org](https://travis-ci.org/) or [Travis-CI.com](https://travis-ci.com/).
 
 ## Installation
 
-### Generate a Github OAuth application
-First, you need to create a GitHub application so that you can have an application ID and secret token.
+### Create a Github application for OAuth authentication
 
-Go to https://github.com/settings/applications/new
+You need to [create a GitHub application](https://github.com/settings/applications/new) so that you can have an Client ID and Client secret to integrate with GitHub's API.
 
-### Setup the code on production
+This is necessary to allow users to login into *CI Status* with their GitHub account.
 
-These commands will setup the app and ask you for the application Client ID and Client secret:
+### Production setup
+
+These commands will setup the application and ask you for the application Client ID and Client secret:
+
 ```
 $ composer install --no-dev --optimize-autoloader
-$ php app/console cache:clear --env=prod --no-debug
+$ app/console cache:clear --env=prod --no-debug
 ```
 
-### Setup on local machine
+To improve security and privacy, be aware that users GitHub tokens are stored in the sessions. You need to take care of how those sessions are stored on your server to protect those tokens. It is recommended that you set up a short expiration time and ensure that the session files are correctly garbage-collected.
 
-Locally, you can run these:
+### Local setup
+
+CI Status is a standard Symfony application:
 
 ```
 $ composer install
-$ php app/console cache:clear
+$ app/console cache:clear
 ```
 
-
-Note: on Ubuntu you may need `sudo apt-get install php5-intl`
+Note: on Ubuntu you may need to run `sudo apt-get install php5-intl`.
