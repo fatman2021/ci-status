@@ -1,8 +1,26 @@
+var currentSort = 'status';
+
 $(function() {
+    $('#refresh-repositories').click(refreshRepositories);
+
+    $('#sort-status').click(function (e) {
+        e.preventDefault();
+        currentSort='status';
+        sortTable()
+    });
+    $('#sort-recent').click(function (e) {
+        e.preventDefault();
+        currentSort='recent';
+        sortTable()
+    });
+    $('#sort-name').click(function (e) {
+        e.preventDefault();
+        currentSort='name';
+        sortTable()
+    });
+
     refreshRepositories();
 });
-
-var currentSort = 'status';
 
 function sortTable()
 {
