@@ -1,4 +1,6 @@
 var currentSort = 'status';
+var totalBuilds = 0;
+var buildsFailing = 0;
 
 $(function() {
     $('#refresh-repositories').click(refreshRepositories);
@@ -48,6 +50,23 @@ function sortTable()
     }
 }
 
+function refreshSummary()
+{
+    var summary = $('#summary');
+
+    summary.find('.failing').text(buildsFailing);
+    summary.find('.total').text(totalBuilds);
+
+    if (buildsFailing > 0) {
+        summary.removeClass('alert-build-success')
+            .addClass('alert-build-fail');
+    } else {
+        summary.removeClass('alert-build-fail')
+            .addClass('alert-build-success');
+    }
+    summary.removeClass('hide');
+}
+
 function refreshRepositories()
 {
     // Clear
@@ -62,6 +81,8 @@ function refreshRepositories()
     dashboard.find('.build-time')
         .tooltip('destroy')
         .empty();
+    totalBuilds = 0;
+    buildsFailing = 0;
 
     $('[data-repository]').each(refreshRepository);
 }
@@ -88,25 +109,28 @@ function refreshRepository()
 
     request.done(function(data) {
         var text, labelClass, order;
+
+        totalBuilds++;
+
         switch (data.branch.state) {
             case 'errored':
                 text = 'Build error';
                 labelClass = 'danger';
                 order = 1;
+                buildsFailing++;
                 break;
             case 'failed':
                 text = 'Build failure';
                 labelClass = 'danger';
                 order = 2;
+                buildsFailing++;
                 break;
             case 'started':
-                console.log(data);
                 text = 'Running';
                 labelClass = 'info';
                 order = 3;
                 break;
             case 'created':
-                console.log(data);
                 text = 'Waiting';
                 labelClass = 'info';
                 order = 4;
@@ -156,6 +180,7 @@ function refreshRepository()
         }
 
         sortTable();
+        refreshSummary();
     });
 
     request.fail(function() {

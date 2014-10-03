@@ -69,3 +69,14 @@ table#dashboard td.info a {
 .tooltip-inner {
     max-width: 350px;
 }
+
+.alert-build-success {
+    background-color: #dff0d8;
+    color: #93c54b;
+    border: 1px solid #dff0d8;
+}
+.alert-build-fail {
+    background-color: #f2dede;
+    color: #e37272;
+    border: 1px solid #e37272;
+}
