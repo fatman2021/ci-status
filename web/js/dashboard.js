@@ -1,4 +1,5 @@
 var currentSort = 'status';
+var reverseSort = false;
 var totalBuilds = 0;
 var buildsFailing = 0;
 
@@ -7,17 +8,20 @@ $(function() {
 
     $('#sort-status').click(function (e) {
         e.preventDefault();
-        currentSort='status';
+        reverseSort = (currentSort === 'status') ? !reverseSort : false;
+        currentSort = 'status';
         sortTable()
     });
     $('#sort-recent').click(function (e) {
         e.preventDefault();
-        currentSort='recent';
+        reverseSort = (currentSort === 'recent') ? !reverseSort : false;
+        currentSort = 'recent';
         sortTable()
     });
     $('#sort-name').click(function (e) {
         e.preventDefault();
-        currentSort='name';
+        reverseSort = (currentSort === 'name') ? !reverseSort : false;
+        currentSort = 'name';
         sortTable()
     });
 
@@ -30,21 +34,23 @@ function sortTable()
         case 'recent':
             $('#dashboard tr').tsort('', {
                 data: 'date',
-                order: 'desc'
+                order: !reverseSort ? 'desc' : 'asc'
             });
             break;
         case 'name':
             $('#dashboard tr').tsort('', {
-                data: 'repository'
+                data: 'repository',
+                order: !reverseSort ? 'asc' : 'desc'
             });
             break;
         case 'status':
         default:
             $('#dashboard tr').tsort('', {
-                data: 'status'
+                data: 'status',
+                order: !reverseSort ? 'asc' : 'desc'
             }, '', {
                 data: 'date',
-                order: 'desc'
+                order: !reverseSort ? 'desc' : 'asc'
             });
             break;
     }
@@ -176,7 +182,7 @@ function refreshRepository()
             var finished = new Date(data.branch.finished_at);
             var duration = Math.round((finished.getTime() - started.getTime()) / 60000);
             domNode.find('.build-time')
-                .tooltip({title: 'Build duration: ' + duration + ' minute(s)', placement: 'bottom'});
+                .tooltip({title: 'Build ran for ' + duration + ' minute(s)', placement: 'bottom'});
         }
 
         sortTable();
