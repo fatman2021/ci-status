@@ -7,7 +7,6 @@ hwi_oauth_login:
     prefix:   /login
 github_login:
     pattern: /login/check-github
-    defaults: { _remember_me: on }
 logout:
     path:   /logout
 
