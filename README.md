@@ -4,6 +4,8 @@ The CI Status dashboard is a web application that shows a build status summary f
 
 It will fetch the continuous integration status for repositories on [Travis-CI.org](https://travis-ci.org/) or [Travis-CI.com](https://travis-ci.com/).
 
+[![](web/img/screenshot.png)](https://ci-status.com/)
+
 ## Installation
 
 ### Requirements
