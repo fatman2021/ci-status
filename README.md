@@ -6,6 +6,10 @@ It will fetch the continuous integration status for repositories on [Travis-CI.o
 
 ## Installation
 
+### Requirements
+
+CI Status requires PHP 5.5 or higher. To use CI Status you need a GitHub account and a Travis-CI account.
+
 ### Create a Github application for OAuth authentication
 
 You need to [create a GitHub application](https://github.com/settings/applications/new) so that you can have an Client ID and Client secret to integrate with GitHub's API.
@@ -33,3 +37,9 @@ $ app/console cache:clear
 ```
 
 Note: on Ubuntu you may need to run `sudo apt-get install php5-intl`.
+
+## Credits
+
+Built by [Piwik](http://piwik.org/) and released under the [GNU Affero GPL license v3](LICENSE).
+
+Pull requests are welcome!
