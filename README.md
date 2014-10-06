@@ -21,7 +21,7 @@ This is necessary to allow users to login into *CI Status* with their GitHub acc
 These commands will setup the application and ask you for the application Client ID and Client secret:
 
 ```
-$ composer install --no-dev --optimize-autoloader
+$ composer install --no-dev --optimize-autoloader --prefer-source
 $ app/console cache:clear --env=prod --no-debug
 ```
 
