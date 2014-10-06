@@ -27,15 +27,13 @@
     </h4>
 
     <p>
-        In order to show your private repositories, we need to get the appropriate authorization from GitHub.
-        Unfortunately, GitHub's API does not provide a <strong>read-only</strong> access, so we ask for
-        write permission when you "Connect with GitHub".
+        In order to show your private repositories we need to get the appropriate authorization from GitHub.
+        We are asking for write permission when you "Connect with GitHub" because GitHub's API does not provide a <strong>read-only</strong> access yet.
     </p>
 
     <p>
-        This application will never write anything to your repositories. Furthermore, it will not
-        store your GitHub token anywhere except in your current session for security reasons.
-        The only downside is that you have to click "Connect with GitHub" on each of your visit.
+        This application will never write anything to your repositories. For added security we will only
+        store your GitHub token for the duration of your session.
     </p>
 
 {% endblock body %}
