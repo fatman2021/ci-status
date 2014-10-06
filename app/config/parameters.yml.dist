@@ -12,3 +12,5 @@ parameters:
     piwik.disabled: true
     piwik.site_id:  1
     piwik.host:     example.com
+
+    http_protocol: https
