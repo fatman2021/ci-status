@@ -15,6 +15,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Webfactory\Bundle\PiwikBundle\WebfactoryPiwikBundle(),
             new Piwik\DashboardBundle\DashboardBundle(),
         );
 

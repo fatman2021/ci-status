@@ -8,3 +8,7 @@ parameters:
 
     github.app.client_id:     abc
     github.app.client_secret: abc
+
+    piwik.disabled: true
+    piwik.site_id:  1
+    piwik.host:     example.com

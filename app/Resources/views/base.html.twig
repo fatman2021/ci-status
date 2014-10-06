@@ -13,7 +13,7 @@
             <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/bootstrap.theme.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/style.cshs') }}">
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         {% endblock %}
     </head>
     <body>
@@ -70,5 +70,7 @@
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('js/jquery.timeago.js') }}"></script>
         {% endblock %}
+
+        {{ piwik_code() }}
     </body>
 </html>

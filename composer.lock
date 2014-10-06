@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c2daaafe0b80718f097862e0d6a4f6e7",
+    "hash": "e893eb726d4efa1a15fb2fbcb5ab538b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1459,6 +1459,55 @@
                 "templating"
             ],
             "time": "2014-07-05 12:19:05"
+        },
+        {
+            "name": "webfactory/piwik-bundle",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webfactory/piwik-bundle.git",
+                "reference": "647a6a97207526b39d89f979e4002da56f3a9995"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webfactory/piwik-bundle/zipball/647a6a97207526b39d89f979e4002da56f3a9995",
+                "reference": "647a6a97207526b39d89f979e4002da56f3a9995",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/symfony": "~2.0",
+                "twig/twig": "~1.0"
+            },
+            "require-dev": {
+                "mayflower/php-codebrowser": "~1.1",
+                "pdepend/pdepend": "~1.1",
+                "phploc/phploc": "~2.0",
+                "phpmd/phpmd": "~1.0",
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "~0.6",
+                "sebastian/phpcpd": "~2.0",
+                "squizlabs/php_codesniffer": "~1.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Webfactory\\Bundle\\PiwikBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "webfactory GmbH",
+                    "email": "info@webfactory.de",
+                    "homepage": "http://www.webfactory.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Symfony2 Bundle that adds a twig-function for the Piwik tracking code.",
+            "time": "2014-09-17 10:13:59"
         }
     ],
     "packages-dev": [

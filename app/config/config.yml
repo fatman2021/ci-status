@@ -51,5 +51,7 @@ hwi_oauth:
             client_secret: "%github.app.client_secret%"
             scope:         "repo"
 
-parameters:
-    app.data_dir: "%kernel.root_dir%/data"
+webfactory_piwik:
+    site_id: "%piwik.site_id%"
+    piwik_host: "%piwik.host%"
+    disabled: "%piwik.disabled%"
