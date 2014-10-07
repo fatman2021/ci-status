@@ -5,7 +5,12 @@
     <div class="jumbotron">
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 col-md-push-6">
+                <div class="thumbnail">
+                    <img src="{{ asset('img/screenshot.png') }}">
+                </div>
+            </div>
+            <div class="col-md-6 col-md-pull-6">
                 <h1>CI Status</h1>
 
                 <p>
@@ -14,16 +19,11 @@
 
                 <p>
                     <a id="login" href="{{ path('hwi_oauth_service_redirect', {'service': 'github'}) }}" class="btn btn-primary btn-lg"
-                       data-loading-text="<i class='fa fa-spinner fa-spin'></i> Connecting to GitHub through the Internet tubes…">
+                       data-loading-text="<i class='fa fa-spinner fa-spin'></i> Connecting through the Internet tubes…">
                         <i class="fa fa-github"></i>
                         Connect with GitHub
                     </a>
                 </p>
-            </div>
-            <div class="col-md-6">
-                <div class="thumbnail">
-                    <img src="{{ asset('img/screenshot.png') }}">
-                </div>
             </div>
         </div>
 
