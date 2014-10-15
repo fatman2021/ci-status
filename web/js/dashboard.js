@@ -146,11 +146,16 @@ function refreshRepository()
                 labelClass = 'success';
                 order = 5;
                 break;
+            case 'canceled':
+                text = 'Canceled';
+                labelClass = 'default';
+                order = 6;
+                break;
             default:
                 console.log('Unknown build status: ' + data.branch.state);
                 text = 'Status unknown';
                 labelClass = 'warning';
-                order = 6;
+                order = 7;
                 break;
         }
 
