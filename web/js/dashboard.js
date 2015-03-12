@@ -90,12 +90,13 @@ function refreshRepositories()
     totalBuilds = 0;
     buildsFailing = 0;
 
-    $('[data-repository]').each(refreshRepository);
+    $('[data-repository]').each(function () {
+        refreshRepository($(this), 'develop');
+    });
 }
 
-function refreshRepository()
+function refreshRepository(domNode, branch)
 {
-    var domNode = $(this);
     var repository = domNode.data('repository');
     var isPro = !!domNode.data('pro');
     var token = domNode.data('token');
@@ -106,11 +107,23 @@ function refreshRepository()
     domNode.data('date', '1970-01-01T00:00:00');
 
     var request = $.ajax({
-        url: endpoint + '/repos/' + repository + '/branches/master',
+        url: endpoint + '/repos/' + repository + '/branches/' + branch,
         headers: {
             Accept: 'application/vnd.travis-ci.2+json',
             Authorization: 'token ' + token
         }
+    });
+
+    request.fail(function() {
+        if (branch === 'develop') {
+            refreshRepository(domNode, 'master');
+            return;
+        }
+        domNode.find('.repository-status')
+            .addClass('default')
+            .find('a').text('No builds on master');
+
+        sortTable();
     });
 
     request.done(function(data) {
@@ -192,13 +205,5 @@ function refreshRepository()
 
         sortTable();
         refreshSummary();
-    });
-
-    request.fail(function() {
-        domNode.find('.repository-status')
-            .addClass('default')
-            .find('a').text('No builds on master');
-
-        sortTable();
     });
 }
