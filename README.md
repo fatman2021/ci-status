@@ -35,7 +35,7 @@ CI Status is a standard Symfony application:
 
 ```
 $ composer install
-$ app/console cache:clear
+$ app/console server:run
 ```
 
 Note: on Ubuntu you may need to run `sudo apt-get install php5-intl`.
