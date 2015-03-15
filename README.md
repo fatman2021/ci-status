@@ -50,8 +50,8 @@ parameters:
 
     # Exclude specific repositories from the dashboard
     excluded_repositories:
-        - "piwik/piwik-tests-plugins"
-        - "piwik/piwik-python-api"
+        - piwik/piwik-tests-plugins
+        - piwik/piwik-python-api
 ```
 
 ## Credits
