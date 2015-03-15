@@ -14,3 +14,5 @@ parameters:
     piwik.host:     example.com
 
     http_protocol: https
+
+    excluded_repositories: []

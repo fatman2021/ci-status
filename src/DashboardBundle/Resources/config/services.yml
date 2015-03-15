@@ -10,4 +10,4 @@ services:
 
     dashboard.repository_provider:
         class: Piwik\Dashboard\RepositoryProvider
-        arguments: ["@security.context"]
+        arguments: ["@security.context", "%excluded_repositories%"]

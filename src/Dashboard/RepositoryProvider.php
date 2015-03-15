@@ -18,9 +18,15 @@ class RepositoryProvider
      */
     private $securityContext;
 
-    public function __construct(SecurityContextInterface $securityContext)
+    /**
+     * @var string[]
+     */
+    private $excludedRepositories;
+
+    public function __construct(SecurityContextInterface $securityContext, $excludedRepositories)
     {
         $this->securityContext = $securityContext;
+        $this->excludedRepositories = $excludedRepositories;
     }
 
     /**
@@ -39,26 +45,45 @@ class RepositoryProvider
         $githubToken = $securityToken->getAccessToken();
 
         // Fetch from Travis.org
-        try {
-            $travis = new TravisClient(self::TRAVIS_ENDPOINT, $user, $githubToken);
-            $repositories = $travis->getUserRepositories($user);
-        } catch (NoTravisAccountException $e) {
-            $repositories = [];
-        }
+        $repositories = $this->fetchRepositories(self::TRAVIS_ENDPOINT, $user, $githubToken);
 
         // Fetch from Travis.com
-        try {
-            $travisPro = new TravisClient(self::TRAVIS_PRO_ENDPOINT, $user, $githubToken);
-            $proRepositories = $travisPro->getUserRepositories($user);
-            array_walk($proRepositories, function (Repository $repository) {
-                $repository->setPro(true);
-            });
-        } catch (NoTravisAccountException $e) {
-            $proRepositories = [];
-        }
+        $proRepositories = $this->fetchRepositories(self::TRAVIS_PRO_ENDPOINT, $user, $githubToken);
+        array_walk($proRepositories, function (Repository $repository) {
+            $repository->setPro(true);
+        });
 
         $repositories = array_merge($repositories, $proRepositories);
 
+        $repositories = $this->removeExcludedRepositories($repositories);
+
         return $repositories;
+    }
+
+    /**
+     * @param string $endpoint
+     * @param User   $user
+     * @param string $githubToken
+     * @return Repository[]
+     */
+    private function fetchRepositories($endpoint, User $user, $githubToken)
+    {
+        try {
+            $travis = new TravisClient($endpoint, $user, $githubToken);
+            return $travis->getUserRepositories($user);
+        } catch (NoTravisAccountException $e) {
+            return [];
+        }
+    }
+
+    /**
+     * @param Repository[] $repositories
+     * @return Repository[]
+     */
+    private function removeExcludedRepositories(array $repositories)
+    {
+        return array_filter($repositories, function (Repository $repository) {
+            return !in_array($repository->getName(), $this->excludedRepositories);
+        });
     }
 }

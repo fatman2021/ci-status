@@ -40,6 +40,20 @@ $ app/console server:run
 
 Note: on Ubuntu you may need to run `sudo apt-get install php5-intl`.
 
+## Configuration
+
+You can set the following options in `app/config/parameters.yml`:
+
+```yaml
+parameters:
+    # ...
+
+    # Exclude specific repositories from the dashboard
+    excluded_repositories:
+        - "piwik/piwik-tests-plugins"
+        - "piwik/piwik-python-api"
+```
+
 ## Credits
 
 Built by [Piwik](http://piwik.org/) and released under the [GNU Affero GPL license v3](LICENSE).
