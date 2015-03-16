@@ -19,6 +19,13 @@
     <li>
         <a href="#" id="sort-name">Sort by name</a>
     </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Branch <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu" id="branch-selector">
+            <li><a href="#" data-branch="master"><i class="fa fa-code-fork"></i> master</a></li>
+            <li><a href="#" data-branch="develop"><i class="fa fa-code-fork"></i> develop</a></li>
+        </ul>
+    </li>
 
 {% endblock %}
 
@@ -37,7 +44,7 @@
 
     <div id="summary" class="alert hide">
         <strong>Summary:</strong>
-        <span class="failing"></span> builds failing out of <span class="total"></span> builds.
+        <span class="failing"></span> builds failing out of <span class="total"></span> builds on <span class="branch"></span>.
     </div>
 
     <table id="dashboard" class="table table-hover">
@@ -54,6 +61,7 @@
                 </td>
 
                 <td class="hidden-xs build-metadata">
+                    <span class="branch"></span>
                     <span class="author"></span>
                     <span class="build-time"></span>
                 </td>

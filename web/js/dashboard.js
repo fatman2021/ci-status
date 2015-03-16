@@ -1,3 +1,4 @@
+var branch = 'master';
 var currentSort = 'status';
 var reverseSort = false;
 var totalBuilds = 0;
@@ -23,6 +24,11 @@ $(function() {
         reverseSort = (currentSort === 'name') ? !reverseSort : false;
         currentSort = 'name';
         sortTable()
+    });
+    $('#branch-selector').on('click', 'a', function (e) {
+        e.preventDefault();
+        branch = $(e.target).data('branch');
+        refreshRepositories();
     });
 
     refreshRepositories();
@@ -62,6 +68,7 @@ function refreshSummary()
 
     summary.find('.failing').text(buildsFailing);
     summary.find('.total').text(totalBuilds);
+    summary.find('.branch').text(branch);
 
     if (buildsFailing > 0) {
         summary.removeClass('alert-build-success')
@@ -78,7 +85,7 @@ function refreshRepositories()
     // Clear
     var dashboard = $('#dashboard');
     dashboard.find('.repository-status')
-        .removeClass('danger warning success info')
+        .removeClass('default danger warning success info')
         .find('a')
         .html('<i class="fa fa-spinner fa-spin"></i>');
     dashboard.find('.author')
@@ -95,7 +102,7 @@ function refreshRepositories()
     });
 }
 
-function refreshRepository(domNode, branch)
+function refreshRepository(domNode)
 {
     var repository = domNode.data('repository');
     var isPro = !!domNode.data('pro');
@@ -115,13 +122,9 @@ function refreshRepository(domNode, branch)
     });
 
     request.fail(function() {
-        if (branch === 'develop') {
-            refreshRepository(domNode, 'master');
-            return;
-        }
         domNode.find('.repository-status')
             .addClass('default')
-            .find('a').text('No builds on master');
+            .find('a').text('No builds on ' + branch);
 
         sortTable();
     });
