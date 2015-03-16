@@ -109,6 +109,7 @@ function refreshRepository(domNode)
     var token = domNode.data('token');
 
     var endpoint = isPro ? 'https://api.travis-ci.com' : 'https://api.travis-ci.org';
+    var buildUrl = isPro ? 'https://magnum.travis-ci.com/' : 'https://travis-ci.org/';
 
     domNode.data('status', 999);
     domNode.data('date', '1970-01-01T00:00:00');
@@ -184,6 +185,7 @@ function refreshRepository(domNode)
         domNode.find('.repository-status')
             .addClass(labelClass)
             .find('a')
+                .attr('href', buildUrl + repository + '/builds/' + data.branch.id)
                 .text(text);
 
         // Author
